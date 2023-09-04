@@ -1,0 +1,40 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <mvc:annotation-driven />
+
+    <!-- 빈 설정을 어노테이션 기반으로 하겠다는 설정태그 (여기 경로를 찾음)-->
+    <context:component-scan base-package="simple">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+
+    <!-- CSS, JS, 이미지 등의 자원은 거의 변하지 않기 때문에, 웹 브라우저에 캐시를 하면
+         네트워크 사용량, 서버 사용량, 웹 브라우저의 반응 속도 등을 개선할 수 있다. -->
+    <mvc:resources mapping="/static/**" location="/static/" />
+    
+    <!--
+     mvc:default-servlet-handler
+     요청 경로와 일치하는 컨트롤러를 찾는다.
+     컨트롤러가 존재하지 않으면, 디폴트 서블릿 핸들러에 전달한다.
+     DispatcherSerlvet이 처리하지 못한 요청을 DefaultSerlvet에게 넘겨주는 역할을 하는 핸들러
+     *.css와 같은 컨트롤러에 매핑되어 있지 않은 URL 요청은 최종적으로 Default Servlet에 전달되어 처리하는 역할
+     
+     
+     web.xml 파일의 dispatcher 가 / 의 경우 설정한다.
+     <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    -->
+    <mvc:default-servlet-handler />
+
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/view/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+</beans>
